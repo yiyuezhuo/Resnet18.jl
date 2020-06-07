@@ -28,7 +28,7 @@ function set_param!(modul::Conv, dict::Dict, prefixs::Vector{String})
     bias_key = join([prefixs; ["bias"]], ".")
     
     w = dict[weight_key]
-    w = permutedims(w, [3,4,2,1]) # align to pytorch original order
+    w = permutedims(w, [4,3,2,1]) # align to pytorch original order
     w = w[size(w,1):-1:1, size(w,2):-1:1, :, :]  # convert correlation kernel to conv kernel
     @debug "dummy set: $(modul.weight |> size) <- dict: $(w |> size)"
     copy!(modul.weight, w)

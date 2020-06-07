@@ -29,7 +29,7 @@ img_arr = img |> channelview .|> Float32  # (3, 512, 512)
 img_arr_croped = img_arr[:, 1:224, 1:224]
 batch_m = reshape(img_arr_croped, 1, size(img_arr_croped)...)
 batch_py = torch.tensor(batch_m)  # (1, 3, 224, 224)
-batch = permutedims(batch_m, [3, 4, 2, 1])  # (224, 224, 3, 1)
+batch = permutedims(batch_m, [4, 3, 2, 1])  # (224, 224, 3, 1)
 
 model = Resnet18.resnet18()
 model_py = torchvision.models.resnet18(pretrained=true);
@@ -76,7 +76,7 @@ Resnet18.set_param!(model, state_dict)
         batch |> model |> sum
     end
 
-    grad_conv1_weight_py = permutedims(model_py.conv1.weight.grad.numpy(), [3, 4, 2, 1])[7:-1:1, 7:-1:1, :, :]
+    grad_conv1_weight_py = permutedims(model_py.conv1.weight.grad.numpy(), [4, 3, 2, 1])[7:-1:1, 7:-1:1, :, :]
     grad_conv1_weight = gs.grads[model.conv1.weight];
 
     @test dist(grad_conv1_weight_py, grad_conv1_weight) < 1e-4
